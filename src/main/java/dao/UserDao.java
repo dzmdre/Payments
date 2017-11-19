@@ -1,8 +1,7 @@
-package Dao;
+package dao;
 
-import Model.Payment;
-import Model.PaymentUser;
-import Model.UserRole;
+import model.PaymentUser;
+import model.UserRole;
 
 import java.util.List;
 

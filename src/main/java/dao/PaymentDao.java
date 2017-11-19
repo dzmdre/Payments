@@ -1,6 +1,6 @@
-package Dao;
+package dao;
 
-import Model.Payment;
+import model.Payment;
 
 import java.util.Date;
 import java.util.List;
