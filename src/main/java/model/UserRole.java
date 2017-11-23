@@ -4,11 +4,15 @@ package model;
  * Created by computer on 13.11.2017.
  */
 public enum UserRole {
-    CLIENT(1), ADMIN(2);
+    USER("USER"), ADMIN("ADMIN");
 
-    private final int roleId;
+    private final String roleId;
 
-    UserRole(int roleId) {
+    UserRole(String roleId) {
         this.roleId = roleId;
+    }
+
+    public String getRoleId() {
+        return roleId;
     }
 }

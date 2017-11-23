@@ -4,8 +4,8 @@ use payment_db;
 
 create table if not exists payment_user (
     user_id bigint AUTO_INCREMENT not null,
-    username varchar(255),
-    password varchar(255),
+    username varchar(255) not null UNIQUE,
+    password varchar(255) not null,
     user_role ENUM('USER','ADMIN'),
     primary key(user_id)
 ) ENGINE=InnoDB;
@@ -14,7 +14,7 @@ create table if not exists payment_user (
 create table if not exists card (
     card_id bigint AUTO_INCREMENT not null,
     card_type varchar(255),
-    card_number varchar(255),
+    card_number varchar(255) not null UNIQUE,
     card_date date,
     user_id bigint not null,
     account_id bigint not null,
@@ -24,7 +24,7 @@ create table if not exists card (
 create table if not exists account (
     account_id bigint AUTO_INCREMENT not null,
     locked bool,
-    account_number varchar(255),
+    account_number varchar(255) not null UNIQUE,
     sum bigint,
     user_id bigint not null,
     card_id bigint not null,
