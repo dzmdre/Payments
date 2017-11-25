@@ -2,13 +2,13 @@ package dao;
 
 import model.Payment;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
  * Created by computer on 16.11.2017.
  */
-public interface PaymentDao extends CRUD<PaymentDao> {
+public interface PaymentDao extends CRUD<Payment> {
     List<Payment> getPaymentsByAccount(Long accountId);
-    List<Payment> getPaymentsByDateAndAccountId(Date date, Long accountId);
+    List<Payment> getPaymentsByDateAndAccountId(LocalDate date, Long accountId);
 }

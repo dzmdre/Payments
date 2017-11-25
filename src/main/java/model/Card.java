@@ -1,6 +1,6 @@
 package model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * Created by computer on 13.11.2017.
@@ -9,7 +9,7 @@ public class Card {
     private Long cardId;
     private String cardType;
     private String cardNumber;
-    private Date cardDate;
+    private LocalDate cardDate;
     private Long userId;
     private Long accountId;
 
@@ -37,11 +37,11 @@ public class Card {
         this.cardNumber = cardNumber;
     }
 
-    public Date getCardDate() {
+    public LocalDate getCardDate() {
         return cardDate;
     }
 
-    public void setCardDate(Date cardDate) {
+    public void setCardDate(LocalDate cardDate) {
         this.cardDate = cardDate;
     }
 

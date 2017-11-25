@@ -1,21 +1,21 @@
 package model;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * Created by computer on 13.11.2017.
  */
 public class Payment {
-    private Date date;
+    private LocalDate date;
     private Long paymentId;
     private Long sum;
     private Long accountId;
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

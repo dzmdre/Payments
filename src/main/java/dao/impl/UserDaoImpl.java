@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Created by computer on 19.11.2017.
  */
-public class UserDaoImpl implements UserDao {
+public class UserDaoImpl extends AbstractDao<PaymentUser> implements UserDao {
 
     @Override
     public List<PaymentUser> getUserByRole(UserRole role) {
@@ -73,7 +73,7 @@ public class UserDaoImpl implements UserDao {
 
 
     @Override
-    public PaymentUser getByid(Long id) {
+    public PaymentUser getById(Long id) {
         try(Connection connection = ConnectionPool.getInstance().getConnection()) {
             PreparedStatement ps = connection.prepareStatement("SELECT * from payment_user WHERE user_id=?");
             ps.setLong(1, id);
@@ -93,26 +93,7 @@ public class UserDaoImpl implements UserDao {
     public PaymentUser save(PaymentUser entity) {
         try(Connection connection = ConnectionPool.getInstance().getConnection()) {
 
-            PreparedStatement ps = null;
-            boolean isSaving = true;
-
-            if (entity.getUserId() == null || getByid(entity.getUserId()) == null) {
-                ps = createSaveStatement(connection, entity);
-            } else {
-                ps = createUpdateStatement(connection, entity);
-                isSaving = false;
-            }
-
-            int affectedRows = ps.executeUpdate();
-            if (affectedRows == 0) {
-                throw new SQLException("Creating user failed, no rows affected.");
-            }
-
-            if (isSaving) {
-                extractNewKeyBySaving(ps, entity);
-            }
-
-            ps.close();
+            return this.save(entity, connection);
 
         } catch (MySQLIntegrityConstraintViolationException e) {
             // TODO
@@ -121,20 +102,20 @@ public class UserDaoImpl implements UserDao {
             // TODO
             e.printStackTrace();
         }
-        return entity;
+        return null;
     }
 
-    private PreparedStatement createSaveStatement(Connection connection, PaymentUser entity)
+    protected PreparedStatement createSaveStatement(Connection connection, PaymentUser entity)
             throws SQLException {
         PreparedStatement ps = connection.prepareStatement("INSERT INTO payment_user (username, password, user_role) VALUES (?, ?, ?)",
                 Statement.RETURN_GENERATED_KEYS);
         ps.setString(1, entity.getUsername());
         ps.setString(2, entity.getPassword());
-        ps.setString(3, entity.getUserRole().name());
+        ps.setString(3, entity.getUserRole() != null ? entity.getUserRole().name() : null);
         return ps;
     }
 
-    private void extractNewKeyBySaving(PreparedStatement ps, PaymentUser paymentUser) throws SQLException {
+    protected void extractNewKeyBySaving(PreparedStatement ps, PaymentUser paymentUser) throws SQLException {
         try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
             if (generatedKeys.next()) {
                 paymentUser.setUserId(generatedKeys.getLong(1));
@@ -145,11 +126,11 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
-    private PreparedStatement createUpdateStatement(Connection connection, PaymentUser entity) throws SQLException {
+    protected PreparedStatement createUpdateStatement(Connection connection, PaymentUser entity) throws SQLException {
         PreparedStatement ps = connection.prepareStatement("UPDATE payment_user SET username=?, password=?, user_role=? WHERE user_id=?");
         ps.setString(1, entity.getUsername());
         ps.setString(2, entity.getPassword());
-        ps.setString(3, entity.getUserRole().name());
+        ps.setString(3, entity.getUserRole() != null ? entity.getUserRole().name() : null);
         ps.setLong(4, entity.getUserId());
         return ps;
     }
@@ -180,5 +161,30 @@ public class UserDaoImpl implements UserDao {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public PaymentUser save(PaymentUser entity, Connection connection) throws SQLException {
+        PreparedStatement ps = null;
+        boolean isSaving = true;
+
+        if (entity.getUserId() == null || getById(entity.getUserId()) == null) {
+            ps = createSaveStatement(connection, entity);
+        } else {
+            ps = createUpdateStatement(connection, entity);
+            isSaving = false;
+        }
+
+        int affectedRows = ps.executeUpdate();
+        if (affectedRows == 0) {
+            throw new SQLException("Creating user failed, no rows affected.");
+        }
+
+        if (isSaving) {
+            extractNewKeyBySaving(ps, entity);
+        }
+
+        ps.close();
+        return entity;
     }
 }

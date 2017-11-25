@@ -17,7 +17,7 @@ public class App {
         paymentUser.setUserRole(UserRole.USER);
         paymentUser.setUsername("user");
         paymentUser.setPassword("password");
-        paymentUser.setUserId(3l);
+        paymentUser.setUserId(1l);
         userDao.save(paymentUser);
         List<PaymentUser> users = userDao.getUserByRole(UserRole.USER);
 
