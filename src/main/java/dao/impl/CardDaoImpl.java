@@ -3,6 +3,7 @@ package dao.impl;
 import connection.ConnectionPool;
 import dao.CardDao;
 import model.Card;
+import utll.PreparedStatementHelper;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -88,7 +89,7 @@ public class CardDaoImpl extends AbstractDao<Card> implements CardDao {
     public Card save(Card entity) {
         try(Connection connection = ConnectionPool.getInstance().getConnection()) {
 
-            this.save(entity, connection);
+           return this.save(entity, connection);
 
         }catch (SQLException e) {
             // TODO
@@ -102,7 +103,7 @@ public class CardDaoImpl extends AbstractDao<Card> implements CardDao {
         PreparedStatement ps = null;
         boolean isSaving = true;
 
-        if (entity.getUserId() == null || getById(entity.getCardId()) == null) {
+        if (entity.getCardId() == null || getById(entity.getCardId()) == null) {
             ps = createSaveStatement(connection, entity);
         } else {
             ps = createUpdateStatement(connection, entity);
@@ -146,6 +147,8 @@ public class CardDaoImpl extends AbstractDao<Card> implements CardDao {
         card.setAccountId(result.getLong("account_id"));
         card.setUserId(result.getLong("user_id"));
         card.setCardDate(result.getDate("card_date") != null ? result.getDate("card_date").toLocalDate() : null);
+        card.setCardType(result.getString("card_type"));
+        card.setCardNumber(result.getString("card_number"));
         return card;
     }
 
@@ -156,9 +159,9 @@ public class CardDaoImpl extends AbstractDao<Card> implements CardDao {
                 Statement.RETURN_GENERATED_KEYS);
         ps.setString(1, entity.getCardNumber());
         ps.setString(2, entity.getCardType());
-        ps.setDate(3, entity.getCardDate() != null ? Date.valueOf(entity.getCardDate()) : null);
-        ps.setLong(3, entity.getAccountId());
-        ps.setLong(3, entity.getUserId());
+        PreparedStatementHelper.setDate(ps, 3, entity.getCardDate());
+        PreparedStatementHelper.setLongOrNull(ps, 4, entity.getAccountId());
+        PreparedStatementHelper.setLongOrNull(ps, 5, entity.getUserId());
         return ps;
     }
 
@@ -168,10 +171,10 @@ public class CardDaoImpl extends AbstractDao<Card> implements CardDao {
                 "UPDATE card SET card_number=?, card_type=?, card_date=?, account_id=?, user_id=?   WHERE card_id=?;");
         ps.setString(1, entity.getCardNumber());
         ps.setString(2, entity.getCardType());
-        ps.setDate(3, entity.getCardDate() != null ? Date.valueOf(entity.getCardDate()) : null);
-        ps.setLong(4, entity.getAccountId());
-        ps.setLong(5, entity.getUserId());
-        ps.setLong(6, entity.getCardId());
+        PreparedStatementHelper.setDate(ps, 3, entity.getCardDate());
+        PreparedStatementHelper.setLongOrNull(ps, 4, entity.getAccountId());
+        PreparedStatementHelper.setLongOrNull(ps, 5, entity.getUserId());
+        PreparedStatementHelper.setLongOrNull(ps, 6, entity.getCardId());
         return ps;
     }
 

@@ -4,6 +4,7 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
 import connection.ConnectionPool;
 import dao.AccountDao;
 import model.Account;
+import utll.PreparedStatementHelper;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -157,23 +158,28 @@ public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
             throws SQLException {
         PreparedStatement ps = connection.prepareStatement(
                 "INSERT INTO account (locked, account_number, sum, user_id, card_id) VALUES (?, ?, ?, ? ,?)", Statement.RETURN_GENERATED_KEYS);
-        ps.setBoolean(1, entity.getLocked());
+
+
+        PreparedStatementHelper.setBooleanOrNull(ps, 1, entity.getLocked());
         ps.setString(2, entity.getAccountNumber());
-        ps.setLong(3, entity.getSum());
-        ps.setLong(4, entity.getUserId());
-        ps.setLong(5, entity.getCardId());
+
+        PreparedStatementHelper.setLongOrNull(ps, 3, entity.getSum());
+        PreparedStatementHelper.setLongOrNull(ps, 4, entity.getUserId());
+        PreparedStatementHelper.setLongOrNull(ps, 5, entity.getCardId());
+
         return ps;
     }
 
     protected PreparedStatement createUpdateStatement(Connection connection, Account entity) throws SQLException {
         PreparedStatement ps = connection.prepareStatement(
                 "UPDATE account SET locked=?, account_number=?, sum=?, user_id=?, card_id=?  WHERE account_id=?");
-        ps.setBoolean(1, entity.getLocked());
+
+        PreparedStatementHelper.setBooleanOrNull(ps, 1, entity.getLocked());
         ps.setString(2, entity.getAccountNumber());
-        ps.setLong(3, entity.getSum());
-        ps.setLong(4, entity.getUserId());
-        ps.setLong(5, entity.getCardId());
-        ps.setLong(6, entity.getAccountId());
+        PreparedStatementHelper.setLongOrNull(ps, 3, entity.getSum());
+        PreparedStatementHelper.setLongOrNull(ps, 4, entity.getUserId());
+        PreparedStatementHelper.setLongOrNull(ps, 5, entity.getCardId());
+        PreparedStatementHelper.setLongOrNull(ps, 6, entity.getAccountId());
         return ps;
     }
 

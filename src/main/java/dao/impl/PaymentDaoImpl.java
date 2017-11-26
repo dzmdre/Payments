@@ -4,6 +4,7 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
 import connection.ConnectionPool;
 import dao.PaymentDao;
 import model.Payment;
+import utll.PreparedStatementHelper;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -124,7 +125,7 @@ public class PaymentDaoImpl extends AbstractDao<Payment> implements PaymentDao {
     public List<Payment> getPaymentsByAccount(Long accountId) {
         try(Connection connection = ConnectionPool.getInstance().getConnection()) {
             PreparedStatement statement = connection.prepareStatement("SELECT * from payment WHERE account_id=?;");
-            statement.setLong(1, accountId);
+            PreparedStatementHelper.setLongOrNull(statement, 1, accountId);
             ResultSet rs = statement.executeQuery();
             List<Payment> paymentList = new ArrayList<>();
             while (rs.next()) {
@@ -143,8 +144,8 @@ public class PaymentDaoImpl extends AbstractDao<Payment> implements PaymentDao {
     public List<Payment> getPaymentsByDateAndAccountId(LocalDate date, Long accountId) {
         try(Connection connection = ConnectionPool.getInstance().getConnection()) {
             PreparedStatement statement = connection.prepareStatement("SELECT * from payment WHERE account_id=? AND payment_date=?;");
-            statement.setLong(1, accountId);
-            statement.setDate(2, date != null ? Date.valueOf(date) : null);
+            PreparedStatementHelper.setDate(statement, 2, date);
+            PreparedStatementHelper.setLongOrNull(statement, 1, accountId);
             ResultSet rs = statement.executeQuery();
             List<Payment> paymentList = new ArrayList<>();
             while (rs.next()) {
@@ -163,18 +164,21 @@ public class PaymentDaoImpl extends AbstractDao<Payment> implements PaymentDao {
     protected PreparedStatement createSaveStatement(Connection connection, Payment entity) throws SQLException {
         PreparedStatement ps = connection.prepareStatement("INSERT INTO payment (payment_date, sum, account_id) VALUES (?, ?, ?)",
                 Statement.RETURN_GENERATED_KEYS);
-        ps.setDate(1, entity.getDate() != null ? Date.valueOf(entity.getDate()) : null);
-        ps.setLong(2, entity.getSum());
-        ps.setLong(3, entity.getAccountId());
+
+        PreparedStatementHelper.setDate(ps, 1, entity.getDate());
+        PreparedStatementHelper.setLongOrNull(ps, 2, entity.getSum());
+        PreparedStatementHelper.setLongOrNull(ps, 3, entity.getAccountId());
         return ps;
     }
 
     @Override
     protected PreparedStatement createUpdateStatement(Connection connection, Payment entity) throws SQLException {
         PreparedStatement ps = connection.prepareStatement("UPDATE payment SET payment_date=?, sum=?, account_id=? WHERE payment_id=?");
-        ps.setDate(1, entity.getDate() != null ? Date.valueOf(entity.getDate()) : null);
-        ps.setLong(2, entity.getSum());
-        ps.setLong(3, entity.getAccountId());
+
+        PreparedStatementHelper.setDate(ps, 1, entity.getDate());
+        PreparedStatementHelper.setLongOrNull(ps, 2, entity.getSum());
+        PreparedStatementHelper.setLongOrNull(ps, 3, entity.getAccountId());
+        PreparedStatementHelper.setLongOrNull(ps, 4, entity.getPaymentId());
         return ps;
 
     }
