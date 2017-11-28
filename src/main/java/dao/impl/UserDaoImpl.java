@@ -5,6 +5,8 @@ import connection.ConnectionPool;
 import dao.UserDao;
 import model.PaymentUser;
 import model.UserRole;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,6 +16,11 @@ import java.util.List;
  * Created by computer on 19.11.2017.
  */
 public class UserDaoImpl extends AbstractDao<PaymentUser> implements UserDao {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserDaoImpl.class);
+
+    private static final String DAO_ERROR = "Dao error";
+
 
     @Override
     public List<PaymentUser> getUserByRole(UserRole role) {
@@ -29,8 +36,7 @@ public class UserDaoImpl extends AbstractDao<PaymentUser> implements UserDao {
             return userList;
 
         } catch (SQLException e) {
-            // TODO
-            e.printStackTrace();
+            LOGGER.error(DAO_ERROR,e);
         }
         return null;
     }
@@ -46,8 +52,7 @@ public class UserDaoImpl extends AbstractDao<PaymentUser> implements UserDao {
             }
 
         } catch (SQLException e) {
-            // TODO
-            e.printStackTrace();
+            LOGGER.error(DAO_ERROR,e);
         }
         return null;
     }
@@ -65,8 +70,7 @@ public class UserDaoImpl extends AbstractDao<PaymentUser> implements UserDao {
             return userList;
 
         } catch (SQLException e) {
-            // TODO
-            e.printStackTrace();
+            LOGGER.error(DAO_ERROR,e);
         }
         return null;
     }
@@ -83,8 +87,7 @@ public class UserDaoImpl extends AbstractDao<PaymentUser> implements UserDao {
             }
 
         } catch (SQLException e) {
-            // TODO
-            e.printStackTrace();
+            LOGGER.error(DAO_ERROR,e);
         }
         return null;
     }
@@ -96,11 +99,9 @@ public class UserDaoImpl extends AbstractDao<PaymentUser> implements UserDao {
             return this.save(entity, connection);
 
         } catch (MySQLIntegrityConstraintViolationException e) {
-            // TODO
-            e.printStackTrace();
+            LOGGER.error(DAO_ERROR,e);
         } catch (SQLException e) {
-            // TODO
-            e.printStackTrace();
+            LOGGER.error(DAO_ERROR,e);
         }
         return null;
     }
@@ -157,8 +158,7 @@ public class UserDaoImpl extends AbstractDao<PaymentUser> implements UserDao {
             }
 
         } catch (SQLException e) {
-            // TODO
-            e.printStackTrace();
+            LOGGER.error(DAO_ERROR,e);
         }
         return null;
     }

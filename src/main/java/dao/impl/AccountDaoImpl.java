@@ -4,6 +4,8 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
 import connection.ConnectionPool;
 import dao.AccountDao;
 import model.Account;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utll.PreparedStatementHelper;
 
 import java.sql.*;
@@ -14,6 +16,10 @@ import java.util.List;
  * Created by computer on 25.11.2017.
  */
 public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AccountDaoImpl.class);
+
+    private static final String DAO_ERROR = "Dao error";
 
 
     @Override
@@ -27,8 +33,7 @@ public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
             }
 
         } catch (SQLException e) {
-            // TODO
-            e.printStackTrace();
+            LOGGER.error(DAO_ERROR,e);
         }
         return null;
     }
@@ -46,8 +51,7 @@ public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
             return accounts;
 
         } catch (SQLException e) {
-            // TODO
-            e.printStackTrace();
+            LOGGER.error(DAO_ERROR,e);
         }
         return null;
     }
@@ -64,8 +68,7 @@ public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
             return accounts;
 
         } catch (SQLException e) {
-            e.printStackTrace();
-
+            LOGGER.error(DAO_ERROR,e);
         }
         return null;
     }
@@ -81,8 +84,7 @@ public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
             }
 
         } catch (SQLException e) {
-            // TODO
-            e.printStackTrace();
+            LOGGER.error(DAO_ERROR,e);
         }
         return null;
     }
@@ -94,11 +96,9 @@ public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
             return this.save(entity, connection);
 
         } catch (MySQLIntegrityConstraintViolationException e) {
-            // TODO
-            e.printStackTrace();
+            LOGGER.error(DAO_ERROR,e);
         } catch (SQLException e) {
-            // TODO
-            e.printStackTrace();
+            LOGGER.error(DAO_ERROR,e);
         }
         return null;
     }
@@ -136,8 +136,7 @@ public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
             }
 
         } catch (SQLException e) {
-            // TODO
-            e.printStackTrace();
+            LOGGER.error(DAO_ERROR,e);
         }
         return null;
     }

@@ -3,6 +3,8 @@ package dao.impl;
 import connection.ConnectionPool;
 import dao.CardDao;
 import model.Card;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utll.PreparedStatementHelper;
 
 import java.sql.*;
@@ -13,6 +15,11 @@ import java.util.List;
  * Created by computer on 25.11.2017.
  */
 public class CardDaoImpl extends AbstractDao<Card> implements CardDao {
+
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CardDaoImpl.class);
+
+    private static final String DAO_ERROR = "Dao error";
 
     @Override
     public List<Card> getCardByUser(Long userId) {
@@ -27,8 +34,7 @@ public class CardDaoImpl extends AbstractDao<Card> implements CardDao {
             return cards;
 
         } catch (SQLException e) {
-            // TODO
-            e.printStackTrace();
+            LOGGER.error(DAO_ERROR,e);
         }
         return null;
     }
@@ -44,8 +50,7 @@ public class CardDaoImpl extends AbstractDao<Card> implements CardDao {
             }
 
         } catch (SQLException e) {
-            // TODO
-            e.printStackTrace();
+            LOGGER.error(DAO_ERROR,e);
         }
         return null;
     }
@@ -61,8 +66,7 @@ public class CardDaoImpl extends AbstractDao<Card> implements CardDao {
             }
 
         } catch (SQLException e) {
-            // TODO
-            e.printStackTrace();
+            LOGGER.error(DAO_ERROR,e);
         }
         return null;
     }
@@ -79,8 +83,7 @@ public class CardDaoImpl extends AbstractDao<Card> implements CardDao {
             return cards;
 
         } catch (SQLException e) {
-            e.printStackTrace();
-
+            LOGGER.error(DAO_ERROR,e);
         }
         return null;
     }
@@ -92,8 +95,7 @@ public class CardDaoImpl extends AbstractDao<Card> implements CardDao {
            return this.save(entity, connection);
 
         }catch (SQLException e) {
-            // TODO
-            e.printStackTrace();
+            LOGGER.error(DAO_ERROR,e);
         }
         return null;
     }
@@ -134,8 +136,7 @@ public class CardDaoImpl extends AbstractDao<Card> implements CardDao {
             }
 
         } catch (SQLException e) {
-            // TODO
-            e.printStackTrace();
+            LOGGER.error(DAO_ERROR,e);
         }
         return null;
     }

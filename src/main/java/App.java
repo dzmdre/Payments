@@ -2,6 +2,8 @@ import dao.UserDao;
 import dao.impl.UserDaoImpl;
 import model.PaymentUser;
 import model.UserRole;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -11,15 +13,7 @@ import java.util.List;
 public class App {
 
     public static void main(String[] strings) {
-
-        UserDao userDao = new UserDaoImpl();
-        PaymentUser paymentUser = new PaymentUser();
-        paymentUser.setUserRole(UserRole.USER);
-        paymentUser.setUsername("user");
-        paymentUser.setPassword("password");
-        paymentUser.setUserId(1l);
-        userDao.save(paymentUser);
-        List<PaymentUser> users = userDao.getUserByRole(UserRole.USER);
-
+        Logger logger = LoggerFactory.getLogger(App.class);
+        logger.info("Hello world1");
     }
 }

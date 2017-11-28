@@ -4,6 +4,8 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
 import connection.ConnectionPool;
 import dao.PaymentDao;
 import model.Payment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import utll.PreparedStatementHelper;
 
 import java.sql.*;
@@ -16,6 +18,10 @@ import java.util.List;
  */
 public class PaymentDaoImpl extends AbstractDao<Payment> implements PaymentDao {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(PaymentDaoImpl.class);
+    private static final String DAO_ERROR = "Dao error";
+
+
     @Override
     public Payment getById(Long id) {
         try(Connection connection = ConnectionPool.getInstance().getConnection()) {
@@ -27,8 +33,7 @@ public class PaymentDaoImpl extends AbstractDao<Payment> implements PaymentDao {
             }
 
         } catch (SQLException e) {
-            // TODO
-            e.printStackTrace();
+            LOGGER.error(DAO_ERROR,e);
         }
         return null;
     }
@@ -46,8 +51,7 @@ public class PaymentDaoImpl extends AbstractDao<Payment> implements PaymentDao {
             return paymentList;
 
         } catch (SQLException e) {
-            // TODO
-            e.printStackTrace();
+            LOGGER.error(DAO_ERROR,e);
         }
         return null;
     }
@@ -59,11 +63,9 @@ public class PaymentDaoImpl extends AbstractDao<Payment> implements PaymentDao {
             return this.save(entity, connection);
 
         } catch (MySQLIntegrityConstraintViolationException e) {
-            // TODO
-            e.printStackTrace();
+            LOGGER.error(DAO_ERROR,e);
         } catch (SQLException e) {
-            // TODO
-            e.printStackTrace();
+            LOGGER.error(DAO_ERROR,e);
         }
         return null;
     }
@@ -104,8 +106,7 @@ public class PaymentDaoImpl extends AbstractDao<Payment> implements PaymentDao {
             }
 
         } catch (SQLException e) {
-            // TODO
-            e.printStackTrace();
+            LOGGER.error(DAO_ERROR,e);
         }
         return null;
     }
@@ -134,8 +135,7 @@ public class PaymentDaoImpl extends AbstractDao<Payment> implements PaymentDao {
             return paymentList;
 
         } catch (SQLException e) {
-            // TODO
-            e.printStackTrace();
+            LOGGER.error(DAO_ERROR,e);
         }
         return null;
     }
@@ -154,8 +154,7 @@ public class PaymentDaoImpl extends AbstractDao<Payment> implements PaymentDao {
             return paymentList;
 
         } catch (SQLException e) {
-            // TODO
-            e.printStackTrace();
+            LOGGER.error(DAO_ERROR,e);
         }
         return null;
     }
