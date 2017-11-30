@@ -8,6 +8,15 @@
         <!--<url-pattern>/*</url-pattern>-->
     <!--</servlet-mapping>-->
 
+    <filter>
+        <filter-name>LoginFilter</filter-name>
+        <filter-class>service.auth.LoginFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>LoginFilter</filter-name>
+        <url-pattern>/api/*</url-pattern>
+    </filter-mapping>
+
     <servlet>
         <servlet-name>EntryPoint</servlet-name>
         <servlet-class>service.entry.EntryController</servlet-class>
@@ -25,4 +34,16 @@
         <servlet-name>LoginService</servlet-name>
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
+
+    <servlet>
+        <servlet-name>LogoutService</servlet-name>
+        <servlet-class>service.auth.LogoutService</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LogoutService</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+    <session-config>
+        <session-timeout>20</session-timeout>
+    </session-config>
 </web-app>
