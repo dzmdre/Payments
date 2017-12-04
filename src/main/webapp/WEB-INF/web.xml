@@ -46,4 +46,12 @@
     <session-config>
         <session-timeout>20</session-timeout>
     </session-config>
+    <servlet>
+        <servlet-name>AccountController</servlet-name>
+        <servlet-class>controller.account.AccountController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AccountController</servlet-name>
+        <url-pattern>/api/account</url-pattern>
+    </servlet-mapping>
 </web-app>

@@ -3,7 +3,7 @@ package service.auth;
 import com.google.gson.reflect.TypeToken;
 import resource.BaseResponse;
 import resource.ResponseType;
-import utll.ValidationParamsUtil;
+import utll.RestParamsUtil;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -29,7 +29,8 @@ public class LoginFilter implements Filter {
 
         if (session == null || session.getAttribute("user") == null) {
             BaseResponse baseResponse = new BaseResponse(ResponseType.ERROR);
-            ValidationParamsUtil.sendResponse(response, baseResponse,new TypeToken<BaseResponse>() {}.getType());
+            response.setStatus(401);
+            RestParamsUtil.sendResponse(response, baseResponse,new TypeToken<BaseResponse>() {}.getType());
         } else {
             chain.doFilter(req, res);
         }

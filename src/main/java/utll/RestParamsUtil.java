@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import org.omg.CORBA.portable.ApplicationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,10 +16,10 @@ import java.lang.reflect.Type;
 /**
  * Created by computer on 29.11.2017.
  */
-public class ValidationParamsUtil {
+public class RestParamsUtil {
 
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(ValidationParamsUtil.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(RestParamsUtil.class);
 
 
     public static JsonObject getJsonFromRequest(HttpServletRequest request) {
@@ -28,6 +27,18 @@ public class ValidationParamsUtil {
             BufferedReader reader = request.getReader();
             Gson gson = new Gson();
             JsonObject data = gson.fromJson(reader, JsonObject.class);
+            return data;
+        } catch (IOException | JsonSyntaxException | JsonIOException e ) {
+            LOGGER.error("Bad request params", e);
+        }
+        return null;
+    }
+
+    public static <T> T getEntityFromRequest(HttpServletRequest request, Class<T> clazz) {
+        try {
+            BufferedReader reader = request.getReader();
+            Gson gson = new Gson();
+            T data = gson.fromJson(reader, clazz);
             return data;
         } catch (IOException | JsonSyntaxException | JsonIOException e ) {
             LOGGER.error("Bad request params", e);

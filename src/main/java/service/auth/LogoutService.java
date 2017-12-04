@@ -3,7 +3,7 @@ package service.auth;
 import com.google.gson.reflect.TypeToken;
 import resource.BaseResponse;
 import resource.ResponseType;
-import utll.ValidationParamsUtil;
+import utll.RestParamsUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -25,6 +25,6 @@ public class LogoutService extends HttpServlet {
             session.invalidate();
         }
         BaseResponse baseResponse = new BaseResponse(ResponseType.OK);
-        ValidationParamsUtil.sendResponse(resp,baseResponse,new TypeToken<BaseResponse>() {}.getType());
+        RestParamsUtil.sendResponse(resp,baseResponse,new TypeToken<BaseResponse>() {}.getType());
     }
 }

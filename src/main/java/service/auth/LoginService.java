@@ -1,29 +1,30 @@
 package service.auth;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import dao.UserDao;
 import dao.impl.UserDaoImpl;
 import model.PaymentUser;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import resource.BaseResponse;
 import resource.ResponseType;
-import utll.ValidationParamsUtil;
+import utll.Common;
+import utll.RestParamsUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by computer on 28.11.2017.
  */
 public class LoginService extends HttpServlet {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(LoginService.class);
 
     private UserDao userDao = null;
     private final static String BAD_PARAMETERS_ERROR = "Username or password is incorrect";
@@ -38,10 +39,11 @@ public class LoginService extends HttpServlet {
 
         BaseResponse baseResponse = new BaseResponse(ResponseType.OK);
 
-        JsonObject body = ValidationParamsUtil.getJsonFromRequest(request);
+        JsonObject body = RestParamsUtil.getJsonFromRequest(request);
 
         if (body == null || body.get("username") == null || body.get("password") == null) {
             sendLoginFailed(baseResponse, response);
+            LOGGER.warn(BAD_PARAMETERS_ERROR);
             return;
         }
 
@@ -56,11 +58,12 @@ public class LoginService extends HttpServlet {
        PaymentUser user = userDao.getUserByUsername(username);
 
        if (user != null && StringUtils.equals(password, user.getPassword())) {
-           request.getSession(true).setAttribute("user", user);
-           ValidationParamsUtil.sendResponse(response, baseResponse ,new TypeToken<BaseResponse>() {}.getType());
+           request.getSession(true).setAttribute(Common.USER, user);
+           RestParamsUtil.sendResponse(response, baseResponse ,new TypeToken<BaseResponse>() {}.getType());
 
        } else {
            sendLoginFailed(baseResponse, response);
+           LOGGER.warn("Login failed");
        }
     }
 
@@ -68,7 +71,7 @@ public class LoginService extends HttpServlet {
     private void sendLoginFailed(BaseResponse baseResponse, HttpServletResponse response) {
         baseResponse.addMessage(BAD_PARAMETERS_ERROR);
         baseResponse.setStatus(ResponseType.ERROR);
-        ValidationParamsUtil.sendResponse(response,baseResponse,new TypeToken<BaseResponse>() {}.getType());
+        RestParamsUtil.sendResponse(response,baseResponse,new TypeToken<BaseResponse>() {}.getType());
     }
 
 }

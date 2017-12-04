@@ -10,6 +10,7 @@ import java.util.Properties;
  * Created by computer on 19.11.2017.
  */
 public class PropertyUtils {
+
     public static final String JDBC_DRIVER = "jdbc.driver";
     public static final String JDBC_DB_URL = "jdbc.url";
     public static final String JDBC_USER = "jdbc.username";
