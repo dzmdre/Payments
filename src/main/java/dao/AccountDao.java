@@ -9,5 +9,4 @@ import java.util.List;
  */
 public interface AccountDao extends CRUD<Account> {
     List<Account> getAccountByUser(Long userId);
-    Account getAccountByCard(Long cardId);
 }

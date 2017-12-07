@@ -44,7 +44,6 @@ public class AccountDaoImplTest {
         account = new Account();
         account.setAccountNumber("123213");
         account.setUserId(paymentUser.getUserId());
-        account.setCardId(card.getCardId());
         accountDao.save(account);
     }
 
@@ -53,7 +52,6 @@ public class AccountDaoImplTest {
 
         if (account != null && accountDao.getById(account.getAccountId()) != null) {
             account.setUserId(null);
-            account.setCardId(null);
             accountDao.save(account);
             accountDao.delete(account);
         }
@@ -92,11 +90,6 @@ public class AccountDaoImplTest {
         Assert.assertTrue(acc.isPresent());
     }
 
-    @Test
-    public void getAccountByCard() throws Exception {
-        Account acc = accountDao.getAccountByCard(card.getCardId());
-        Assert.assertNotNull(acc);
-    }
 
     @Test
     public void save() throws Exception {

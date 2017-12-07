@@ -1,12 +1,4 @@
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" version="2.5">
-    <!--<servlet>-->
-      <!--<servlet-name>EntryAppController</servlet-name>-->
-      <!--<servlet-class>controller.EntryAppController</servlet-class>-->
-    <!--</servlet>-->
-    <!--<servlet-mapping>-->
-        <!--<servlet-name>EntryAppController</servlet-name>-->
-        <!--<url-pattern>/*</url-pattern>-->
-    <!--</servlet-mapping>-->
 
     <filter>
         <filter-name>LoginFilter</filter-name>
@@ -53,5 +45,23 @@
     <servlet-mapping>
         <servlet-name>AccountController</servlet-name>
         <url-pattern>/api/account</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>CardController</servlet-name>
+        <servlet-class>controller.card.CardController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CardController</servlet-name>
+        <url-pattern>/api/card</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>CardTypeController</servlet-name>
+        <servlet-class>controller.card.CardTypeController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CardTypeController</servlet-name>
+        <url-pattern>/api/card/type</url-pattern>
     </servlet-mapping>
 </web-app>

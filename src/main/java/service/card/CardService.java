@@ -23,12 +23,14 @@ public class CardService {
         return cardDao.save(card);
     }
 
-    public List<Card> getAccountByUser(Long userId) {
+    public List<Card> getCardByUser(Long userId) {
         return cardDao.getCardByUser(userId);
     }
 
-    public Card getCardyCard(Long accountId) {
+    public Card getCardByAccount(Long accountId) {
         return cardDao.getCardByAccount(accountId);
     }
+
+    public Card getCardById(Long id) { return cardDao.getById(id); }
 
 }

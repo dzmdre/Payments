@@ -74,22 +74,6 @@ public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
     }
 
     @Override
-    public Account getAccountByCard(Long cardId) {
-        try(Connection connection = ConnectionPool.getInstance().getConnection()) {
-            PreparedStatement ps = connection.prepareStatement("SELECT * from account WHERE card_id=?");
-            ps.setLong(1, cardId);
-            ResultSet rs = ps.executeQuery();
-            if(rs.next()) {
-                return extract(rs);
-            }
-
-        } catch (SQLException e) {
-            LOGGER.error(DAO_ERROR,e);
-        }
-        return null;
-    }
-
-    @Override
     public Account save(Account entity) {
         try(Connection connection = ConnectionPool.getInstance().getConnection()) {
 
@@ -147,7 +131,6 @@ public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
         account.setUserId(rs.getLong("user_id") );
         account.setAccountNumber(rs.getString("account_number") );
         account.setAccountId(rs.getLong("account_id") );
-        account.setCardId(rs.getLong("card_id"));
         account.setLocked(rs.getBoolean("locked"));
         account.setSum(rs.getLong("sum"));
         return account;
@@ -156,7 +139,7 @@ public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
     protected PreparedStatement createSaveStatement(Connection connection, Account entity)
             throws SQLException {
         PreparedStatement ps = connection.prepareStatement(
-                "INSERT INTO account (locked, account_number, sum, user_id, card_id) VALUES (?, ?, ?, ? ,?)", Statement.RETURN_GENERATED_KEYS);
+                "INSERT INTO account (locked, account_number, sum, user_id) VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 
 
         PreparedStatementHelper.setBooleanOrNull(ps, 1, entity.getLocked());
@@ -164,21 +147,19 @@ public class AccountDaoImpl extends AbstractDao<Account> implements AccountDao {
 
         PreparedStatementHelper.setLongOrNull(ps, 3, entity.getSum());
         PreparedStatementHelper.setLongOrNull(ps, 4, entity.getUserId());
-        PreparedStatementHelper.setLongOrNull(ps, 5, entity.getCardId());
 
         return ps;
     }
 
     protected PreparedStatement createUpdateStatement(Connection connection, Account entity) throws SQLException {
         PreparedStatement ps = connection.prepareStatement(
-                "UPDATE account SET locked=?, account_number=?, sum=?, user_id=?, card_id=?  WHERE account_id=?");
+                "UPDATE account SET locked=?, account_number=?, sum=?, user_id=?  WHERE account_id=?");
 
         PreparedStatementHelper.setBooleanOrNull(ps, 1, entity.getLocked());
         ps.setString(2, entity.getAccountNumber());
         PreparedStatementHelper.setLongOrNull(ps, 3, entity.getSum());
         PreparedStatementHelper.setLongOrNull(ps, 4, entity.getUserId());
-        PreparedStatementHelper.setLongOrNull(ps, 5, entity.getCardId());
-        PreparedStatementHelper.setLongOrNull(ps, 6, entity.getAccountId());
+        PreparedStatementHelper.setLongOrNull(ps, 5, entity.getAccountId());
         return ps;
     }
 

@@ -9,7 +9,6 @@ public class Account {
     private String accountNumber;
     private Long sum;
     private Long userId;
-    private Long cardId;
 
     public Long getAccountId() {
         return accountId;
@@ -51,11 +50,5 @@ public class Account {
         this.userId = userId;
     }
 
-    public Long getCardId() {
-        return cardId;
-    }
 
-    public void setCardId(Long cardId) {
-        this.cardId = cardId;
-    }
 }

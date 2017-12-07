@@ -4,6 +4,7 @@ import com.google.gson.reflect.TypeToken;
 import dao.impl.AccountDaoImpl;
 import model.Account;
 import model.PaymentUser;
+import model.UserRole;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,9 +31,9 @@ public class AccountController extends HttpServlet {
 
     private AccountService accountService;
     private final String NO_ACCOUNT = "Account is not found.";
+    private final String INVALID_CREDENTIALS = "Invalid credentials";
 
     public AccountController() {
-
     }
 
     @Override
@@ -79,6 +80,7 @@ public class AccountController extends HttpServlet {
 
         PaymentUser user = (PaymentUser) req.getSession().getAttribute(Common.USER);
         account.setUserId(user.getUserId());
+        account.setLocked(false);
         if (StringUtils.isEmpty(account.getAccountNumber())) {
             account.setAccountNumber(UUID.randomUUID().toString());
         }
@@ -103,6 +105,11 @@ public class AccountController extends HttpServlet {
             return;
         }
 
+        if (!checkForCredentials(account, req)) {
+            invalidCredentialRequest(resp);
+            return;
+        }
+
         account = accountService.save(account);
 
         if (account == null) {
@@ -120,6 +127,22 @@ public class AccountController extends HttpServlet {
         responseValue.getMessages().add(NO_ACCOUNT);
         RestParamsUtil.sendResponse(resp, responseValue, new TypeToken<BaseResponseValue<Account>>(){}.getType());
         LOGGER.warn("Account error");
+    }
+
+    private void invalidCredentialRequest(HttpServletResponse resp) {
+        BaseResponseValue<Account> responseValue = new BaseResponseValue<>(ResponseType.ERROR);
+        responseValue.getMessages().add(INVALID_CREDENTIALS);
+        RestParamsUtil.sendResponse(resp, responseValue, new TypeToken<BaseResponseValue<Account>>(){}.getType());
+        LOGGER.warn(INVALID_CREDENTIALS);
+    }
+
+    private boolean checkForCredentials(Account account, HttpServletRequest request) {
+        Account fromBase = accountService.getById(account.getAccountId());
+        PaymentUser paymentUser = (PaymentUser) request.getSession().getAttribute("user");
+        if (!fromBase.getLocked() && account.getLocked()) {
+            return paymentUser.getUserRole().equals(UserRole.ADMIN);
+        }
+        return true;
     }
 
 }

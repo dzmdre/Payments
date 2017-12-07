@@ -27,7 +27,6 @@ create table if not exists account (
     account_number varchar(255) not null UNIQUE,
     sum bigint,
     user_id bigint null,
-    card_id bigint null,
     primary key (account_id)
 ) ENGINE=InnoDB;
 

@@ -31,9 +31,6 @@ public class AccountService {
         return accountDao.getAccountByUser(userId);
     }
 
-    public Account getAccountByCard(Long cardId) {
-        return accountDao.getAccountByCard(cardId);
-    }
 
     public Account getById(Long id) {
         return accountDao.getById(id);
