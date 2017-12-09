@@ -64,4 +64,14 @@
         <servlet-name>CardTypeController</servlet-name>
         <url-pattern>/api/card/type</url-pattern>
     </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>PaymentController</servlet-name>
+        <servlet-class>controller.payment.PaymentController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PaymentController</servlet-name>
+        <url-pattern>/api/payment</url-pattern>
+    </servlet-mapping>
 </web-app>

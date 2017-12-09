@@ -32,6 +32,10 @@ public class PaymentService {
         return paymentDao.getPaymentsByAccount(accountId);
     }
 
+    public Payment getById(Long paymentId) {
+        return paymentDao.getById(paymentId);
+    }
+
     public List<Payment> getByAccountAndDate(Long accountId, LocalDate date) {
         return paymentDao.getPaymentsByDateAndAccountId(date, accountId);
     }
